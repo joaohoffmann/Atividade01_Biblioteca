@@ -45,6 +45,7 @@ namespace Biblioteca.Controllers
 
             public IActionResult Edicao(int id)
         {
+            Autenticacao.CheckLogin(this);
             UsuarioService us = new UsuarioService();
             Usuario u = us.ObterPorId(id);
             return View(u);

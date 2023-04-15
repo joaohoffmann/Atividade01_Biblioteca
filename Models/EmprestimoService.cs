@@ -36,34 +36,32 @@ namespace Biblioteca.Models
             //precisamos inserir tambem a função de caso esteja com o valor de devolvido setado como true ele nao deve aparecer na listagem.
             using(BibliotecaContext bc = new BibliotecaContext())
             {
-                   IQueryable<Emprestimo> query;
+                IQueryable<Emprestimo> query;
                 
-                if(filtro != null)
-                {
-                    //definindo dinamicamente a filtragem
-                    switch(filtro.TipoFiltro)
+                    if(filtro != null)
                     {
-                        case "Nome":
-                            query = bc.Emprestimos.Where(e => e.NomeUsuario.Contains(filtro.Filtro));
-                        break;
-                         case "Livro":
-                            query = bc.Emprestimos.Where(e => e.Livro.Titulo.Contains(filtro.Filtro));
-                        break;
-                        default:
-                            query = bc.Emprestimos;
-                        break;
+                        //definindo dinamicamente a filtragem
+                        switch(filtro.TipoFiltro)
+                        {
+                            case "Usuario":
+                                query = bc.Emprestimos.Where(e => e.NomeUsuario.Contains(filtro.Filtro));
+                            break;
+                            case "Livro":
+                                query = bc.Emprestimos.Where(e => e.Livro.Titulo.Contains(filtro.Filtro));
+                            break;
+                            default:
+                                query = bc.Emprestimos;
+                            break;
+                        }
                     }
-                }
-                else
-                {
-                    // caso filtro não tenha sido informado
-                    query = bc.Emprestimos;
-                }
-                
-                //ordenação padrão
-                return query.OrderBy(e => u.Login).ToList();
-                
-                return bc.Emprestimos.Include(e => e.Livro).ToList();
+                    else
+                    {
+                        // caso filtro não tenha sido informado
+                        query = bc.Emprestimos;
+                    }
+                    
+                    //ordenação padrão
+                    return query.Include(e => e.Livro).OrderBy(e => e.DataDevolucao).ToList();
             }
         }
 
