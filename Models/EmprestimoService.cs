@@ -25,6 +25,7 @@ namespace Biblioteca.Models
                 emprestimo.LivroId = e.LivroId;
                 emprestimo.DataEmprestimo = e.DataEmprestimo;
                 emprestimo.DataDevolucao = e.DataDevolucao;
+                emprestimo.Devolvido = e.Devolvido;
 
                 bc.SaveChanges();
             }
@@ -32,8 +33,10 @@ namespace Biblioteca.Models
 
         public ICollection<Emprestimo> ListarTodos(FiltrosEmprestimos filtro)
         {
+            //precisamos inserir tambem a função de caso esteja com o valor de devolvido setado como true ele nao deve aparecer na listagem.
             using(BibliotecaContext bc = new BibliotecaContext())
             {
+                
                 return bc.Emprestimos.Include(e => e.Livro).ToList();
             }
         }
